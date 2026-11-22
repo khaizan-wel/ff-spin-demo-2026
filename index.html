@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spin Skin FF — Demo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#40121a,#11131c 55%,#07080d);color:#fff;font-family:Arial,sans-serif}
+main{max-width:520px;margin:auto;padding:24px 16px 40px;text-align:center}.tag{display:inline-block;border:1px solid #ff626a;color:#ffb5b9;padding:7px 13px;border-radius:30px;font-size:12px}
+h1{font-size:clamp(30px,8vw,44px);margin:18px 0 8px;text-shadow:0 0 18px #ff303b}.sub{color:#c9cbd4;font-size:14px;line-height:1.5;margin:0 auto 22px}
+.panel{background:linear-gradient(145deg,#1c2230,#10131c);border:1px solid #3a4050;border-radius:22px;padding:20px;box-shadow:0 15px 45px #0008}
+.wrap{width:min(78vw,320px);aspect-ratio:1;margin:8px auto 20px;position:relative}.pointer{position:absolute;z-index:2;top:-8px;left:50%;transform:translateX(-50%);border-left:17px solid transparent;border-right:17px solid transparent;border-top:34px solid white;filter:drop-shadow(0 3px 4px #000)}
+#wheel{width:100%;height:100%;border-radius:50%;border:9px solid #e9bd4d;box-shadow:0 0 0 5px #5e3518,0 0 25px #ffcf54aa;transition:transform 4s cubic-bezier(.12,.75,.15,1);background:conic-gradient(#c51d2d 0 45deg,#252d40 45deg 90deg,#c51d2d 90deg 135deg,#252d40 135deg 180deg,#c51d2d 180deg 225deg,#252d40 225deg 270deg,#c51d2d 270deg 315deg,#252d40 315deg)}
+.labels{position:absolute;inset:0;pointer-events:none}.labels span{position:absolute;left:50%;top:50%;font-size:12px;font-weight:bold;width:85px;text-shadow:0 2px 4px #000}
+button{width:100%;border:0;border-radius:13px;padding:14px 18px;font-size:15px;font-weight:800;cursor:pointer;color:white;background:linear-gradient(90deg,#ff2635,#c90025)}
+button:disabled{opacity:.6}.secondary{margin-top:12px;background:#293246}.result{display:none;margin-top:15px;padding:13px;border:1px solid #9b7936;border-radius:12px;background:#302713;color:#ffe59a;font-weight:bold}
+.claim{display:none;margin-top:18px}.note{font-size:12px;color:#aeb3c0;line-height:1.5;margin:18px 4px 0}
+</style></head>
+<body><main>
+<span class="tag">EVENT DEMO • FAN PAGE</span><h1>SPIN SKIN<br>GRATIS FF</h1>
+<p class="sub">Putar roda keberuntungan dan lihat hadiah demo yang kamu dapatkan.</p>
+<section class="panel">
+<div class="wrap"><div class="pointer"></div><div id="wheel"></div>
+<div class="labels">
+<span style="transform:rotate(22.5deg) translate(0,-118px)">Bundle</span><span style="transform:rotate(67.5deg) translate(0,-118px)">Emote</span>
+<span style="transform:rotate(112.5deg) translate(0,-118px)">Voucher</span><span style="transform:rotate(157.5deg) translate(0,-118px)">Loot Box</span>
+<span style="transform:rotate(202.5deg) translate(0,-118px)">Skin</span><span style="transform:rotate(247.5deg) translate(0,-118px)">Token</span>
+<span style="transform:rotate(292.5deg) translate(0,-118px)">Bonus</span><span style="transform:rotate(337.5deg) translate(0,-118px)">Coba Lagi</span>
+</div></div>
+<button id="spin">SPIN SEKARANG</button><div class="result" id="result">🎉 Hadiah demo berhasil didapat!</div>
+<div class="claim" id="claim"><button class="secondary" id="claimBtn">KLAIM HADIAH DEMO</button></div>
+</section>
+<p class="note">Ini mini-game tidak resmi. Tidak meminta login Google/Facebook, password, atau OTP. Tidak ada hadiah resmi dari Garena.</p>
+</main>
+<script>
+const API_BASE = ""; // Isi URL server bila frontend dan backend di-host terpisah, contoh: https://domain-backend.example
+async function notify(event){
+  try { await fetch(`${API_BASE}/api/event`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({event})}); }
+  catch(e){ console.info("Notifikasi tidak terkirim."); }
+}
+notify("page_open");
+let spun=false;
+document.getElementById("spin").addEventListener("click",()=>{
+ if(spun)return;spun=true;document.getElementById("spin").disabled=true;
+ document.getElementById("wheel").style.transform=`rotate(${1800+Math.floor(Math.random()*360)}deg)`;
+ notify("spin_clicked");
+ setTimeout(()=>{document.getElementById("result").style.display="block";document.getElementById("claim").style.display="block";},4100);
+});
+document.getElementById("claimBtn").addEventListener("click",()=>{
+ document.getElementById("claimBtn").textContent="KLAIM DEMO DICATAT";
+ notify("claim_clicked");
+});
+</script></body></html>
